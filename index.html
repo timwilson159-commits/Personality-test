@@ -1,0 +1,911 @@
+<title>Personality Index</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&display=swap">
+
+<style>
+/* Layout: single centered card, question-by-question progression */
+:root {
+  --bg: #F3F1ED;
+  --surface: #FDFCFB;
+  --surface-2: #EDEBE6;
+  --fg: #1A1917;
+  --fg-muted: #6A6660;
+  --accent: #3D2EC2;
+  --accent-soft: #ECEAFA;
+  --accent-text: #2B1FAD;
+  --border: #DDD9D2;
+  --option-hover: #F3F1FB;
+  --font-display: 'Lora', Georgia, serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15141A;
+    --surface: #1E1C28;
+    --surface-2: #27253300;
+    --fg: #EBE8E3;
+    --fg-muted: #908D99;
+    --accent: #7D70F6;
+    --accent-soft: #231F48;
+    --accent-text: #A79DF8;
+    --border: #2D2B3C;
+    --option-hover: #242038;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15141A;
+  --surface: #1E1C28;
+  --surface-2: #272533;
+  --fg: #EBE8E3;
+  --fg-muted: #908D99;
+  --accent: #7D70F6;
+  --accent-soft: #231F48;
+  --accent-text: #A79DF8;
+  --border: #2D2B3C;
+  --option-hover: #242038;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--fg);
+  min-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 48px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  width: 100%;
+  max-width: 620px;
+  padding: 52px 52px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+}
+
+@media (max-width: 580px) {
+  body { padding-block: 16px; }
+  .card { padding: 32px 22px; border-radius: 12px; }
+}
+
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* ── PROGRESS HEADER ── */
+.q-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 36px;
+  gap: 16px;
+}
+.q-wordmark {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg-muted);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+.progress-wrap { flex: 1; }
+.progress-label {
+  font-size: 11px;
+  color: var(--fg-muted);
+  text-align: right;
+  margin-bottom: 5px;
+  font-variant-numeric: tabular-nums;
+}
+.progress-track {
+  height: 3px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 99px;
+  transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── INTRO ── */
+.intro-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  margin-bottom: 18px;
+}
+.intro-title {
+  font-family: var(--font-display);
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1.18;
+  color: var(--fg);
+  margin-bottom: 18px;
+  text-wrap: balance;
+}
+.intro-sub {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--fg-muted);
+  margin-bottom: 36px;
+}
+.intro-stats {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 36px;
+}
+.intro-stat {
+  flex: 1;
+  padding: 14px 0;
+  text-align: center;
+  border-right: 1px solid var(--border);
+}
+.intro-stat:last-child { border-right: none; }
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+}
+.stat-lbl {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--fg-muted);
+  margin-top: 3px;
+}
+.field {
+  margin-bottom: 22px;
+}
+.field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fg-muted);
+  margin-bottom: 7px;
+}
+.field input {
+  width: 100%;
+  padding: 13px 16px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  border-radius: 9px;
+  color: var(--fg);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.field input:focus { border-color: var(--accent); }
+.field input::placeholder { color: var(--fg-muted); }
+
+/* ── QUESTION ── */
+.q-num {
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  margin-bottom: 12px;
+}
+.q-text {
+  font-family: var(--font-display);
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--fg);
+  margin-bottom: 26px;
+  text-wrap: balance;
+}
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  padding: 14px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  user-select: none;
+}
+.option:hover { border-color: var(--accent); background: var(--option-hover); }
+.option.selected { border-color: var(--accent); background: var(--accent-soft); }
+.opt-letter {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--fg-muted);
+  transition: all 0.15s;
+  margin-top: 1px;
+}
+.option.selected .opt-letter { background: var(--accent); border-color: var(--accent); color: #fff; }
+.opt-text { font-size: 14.5px; line-height: 1.55; color: var(--fg); }
+
+/* Likert */
+.likert-stmt {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--fg);
+  font-style: italic;
+  padding: 16px 20px;
+  background: var(--surface-2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 9px 9px 0;
+  margin-bottom: 22px;
+}
+.likert-scale {
+  display: flex;
+  gap: 7px;
+}
+.likert-btn {
+  flex: 1;
+  padding: 13px 2px;
+  border: 1.5px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.15s, background 0.15s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  user-select: none;
+}
+.likert-btn:hover { border-color: var(--accent); background: var(--option-hover); }
+.likert-btn.selected { border-color: var(--accent); background: var(--accent-soft); }
+.likert-num {
+  font-size: 17px;
+  font-weight: 700;
+  font-family: var(--font-display);
+  color: var(--fg-muted);
+  font-variant-numeric: tabular-nums;
+  transition: color 0.15s;
+}
+.likert-btn.selected .likert-num { color: var(--accent); }
+.likert-foot {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+.likert-foot span { font-size: 11px; color: var(--fg-muted); }
+
+/* Nav */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px;
+}
+.btn {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 28px;
+  border-radius: 9px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.18s, transform 0.1s;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { opacity: 0.86; }
+.btn-primary:disabled { opacity: 0.36; cursor: not-allowed; transform: none; }
+.btn-ghost { background: transparent; color: var(--fg-muted); padding: 12px 16px; }
+.btn-ghost:hover { color: var(--fg); }
+.btn-full { width: 100%; padding: 15px; font-size: 15px; border-radius: 10px; }
+
+/* ── LOADING ── */
+.loading-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 0 16px;
+  gap: 28px;
+}
+.loading-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--fg);
+  text-align: center;
+}
+.loader {
+  width: 52px;
+  height: 52px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.85s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.p-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  width: 100%;
+  max-width: 310px;
+}
+.p-step {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 13.5px;
+  color: var(--fg-muted);
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.p-step.vis { opacity: 1; }
+.p-step.done { color: var(--fg); }
+.p-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--border);
+  flex-shrink: 0;
+  transition: background 0.35s;
+}
+.p-step.done .p-dot { background: var(--accent); }
+
+/* ── RESULT ── */
+.result-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  margin-bottom: 6px;
+}
+.result-name-line {
+  font-size: 14.5px;
+  color: var(--fg-muted);
+  margin-bottom: 28px;
+}
+.type-badge {
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 34px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.result-type-name {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--fg);
+  margin-bottom: 4px;
+}
+.result-type-sub {
+  font-size: 13.5px;
+  color: var(--fg-muted);
+  margin-bottom: 6px;
+}
+.trait-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 28px;
+}
+.tag {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 11px;
+  border-radius: 99px;
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  border: 1px solid transparent;
+}
+.result-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 20px 0 24px;
+}
+.result-body {
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--fg);
+}
+.result-body p { margin-bottom: 16px; }
+.result-body p:last-child { margin-bottom: 0; }
+
+/* Rating */
+.rating-box {
+  margin-top: 34px;
+  padding: 22px 24px;
+  background: var(--surface-2);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+.rating-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fg);
+  margin-bottom: 4px;
+}
+.rating-sub {
+  font-size: 13px;
+  color: var(--fg-muted);
+  margin-bottom: 16px;
+}
+.stars { display: flex; gap: 8px; margin-bottom: 12px; }
+.star {
+  font-size: 30px;
+  cursor: pointer;
+  color: var(--border);
+  transition: color 0.15s, transform 0.12s;
+  user-select: none;
+  line-height: 1;
+}
+.star.lit { color: #E8A020; }
+.star:hover { transform: scale(1.2); }
+.rating-done {
+  font-size: 13.5px;
+  color: var(--accent-text);
+  font-weight: 600;
+  display: none;
+}
+.rating-done.vis { display: block; }
+</style>
+
+<div class="card">
+
+  <!-- ── INTRO SCREEN ── -->
+  <div class="screen active" id="screen-intro">
+    <p class="intro-eyebrow">Personality Research Index</p>
+    <h1 class="intro-title">What kind of person are you, really?</h1>
+    <p class="intro-sub">This assessment uses validated psychological dimensions to identify your dominant personality profile. Your responses are completely confidential and are used only to generate your personalised type.</p>
+    <div class="intro-stats">
+      <div class="intro-stat">
+        <div class="stat-num">12</div>
+        <div class="stat-lbl">Questions</div>
+      </div>
+      <div class="intro-stat">
+        <div class="stat-num">~5</div>
+        <div class="stat-lbl">Minutes</div>
+      </div>
+      <div class="intro-stat">
+        <div class="stat-num">4</div>
+        <div class="stat-lbl">Profile types</div>
+      </div>
+    </div>
+    <div class="field">
+      <label for="name-input">Your first name</label>
+      <input type="text" id="name-input" placeholder="Enter your name" autocomplete="off" spellcheck="false">
+    </div>
+    <button class="btn btn-primary btn-full" id="btn-start">Begin Assessment →</button>
+  </div>
+
+  <!-- ── QUESTION SCREEN ── -->
+  <div class="screen" id="screen-question">
+    <div class="q-header">
+      <span class="q-wordmark">PRI</span>
+      <div class="progress-wrap">
+        <div class="progress-label" id="prog-label">1 of 12</div>
+        <div class="progress-track">
+          <div class="progress-fill" id="prog-fill" style="width:8%"></div>
+        </div>
+      </div>
+    </div>
+    <p class="q-num" id="q-num">Question 1</p>
+    <p class="q-text" id="q-text"></p>
+    <div id="q-body"></div>
+    <div class="nav">
+      <button class="btn btn-ghost" id="btn-back">← Back</button>
+      <button class="btn btn-primary" id="btn-next" disabled>Next →</button>
+    </div>
+  </div>
+
+  <!-- ── LOADING SCREEN ── -->
+  <div class="screen" id="screen-loading">
+    <div class="loading-wrap">
+      <div class="loader"></div>
+      <p class="loading-title">Analysing your responses…</p>
+      <div class="p-steps" id="p-steps">
+        <div class="p-step" id="ps1"><div class="p-dot"></div>Mapping response patterns</div>
+        <div class="p-step" id="ps2"><div class="p-dot"></div>Scoring dimensional indicators</div>
+        <div class="p-step" id="ps3"><div class="p-dot"></div>Identifying primary profile type</div>
+        <div class="p-step" id="ps4"><div class="p-dot"></div>Generating personalised summary</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RESULT SCREEN ── -->
+  <div class="screen" id="screen-result">
+    <p class="result-eyebrow">Your Personality Profile</p>
+    <p class="result-name-line" id="result-name-line"></p>
+    <div class="type-badge" id="type-badge">A</div>
+    <p class="result-type-name" id="result-type-name"></p>
+    <p class="result-type-sub" id="result-type-sub"></p>
+    <div class="trait-tags" id="trait-tags"></div>
+    <div class="result-divider"></div>
+    <div class="result-body" id="result-body"></div>
+    <div class="rating-box">
+      <p class="rating-title">How accurate is this profile?</p>
+      <p class="rating-sub">Rate how well this description reflects who you actually are (1 = not at all, 5 = extremely accurate).</p>
+      <div class="stars" id="stars">
+        <span class="star" data-v="1">★</span>
+        <span class="star" data-v="2">★</span>
+        <span class="star" data-v="3">★</span>
+        <span class="star" data-v="4">★</span>
+        <span class="star" data-v="5">★</span>
+      </div>
+      <p class="rating-done" id="rating-done"></p>
+    </div>
+  </div>
+
+</div><!-- /card -->
+
+<script>
+const QUESTIONS = [
+  {
+    type: "mc",
+    text: "When you begin a new project or assignment, your first instinct is to:",
+    options: [
+      { label: "Create a detailed plan or checklist before starting", score: 4 },
+      { label: "Start working and figure out the approach as you go", score: 2 },
+      { label: "Research and gather information before deciding on a direction", score: 3 },
+      { label: "Talk it over with others to get a sense of what's expected", score: 1 }
+    ]
+  },
+  {
+    type: "likert",
+    text: "Rate your agreement with this statement:",
+    stmt: "I often find myself replaying decisions or conversations after the fact, wondering if I handled things the right way."
+  },
+  {
+    type: "mc",
+    text: "In a group situation, you tend to naturally take on the role of:",
+    options: [
+      { label: "The organiser — keeping things structured and on track", score: 4 },
+      { label: "The idea generator — contributing creative possibilities", score: 3 },
+      { label: "The executor — getting your head down and doing the work", score: 2 },
+      { label: "The mediator — making sure everyone works well together", score: 1 }
+    ]
+  },
+  {
+    type: "likert",
+    text: "Rate your agreement with this statement:",
+    stmt: "I have a great deal of unused potential that I haven't yet had the chance to fully put to use."
+  },
+  {
+    type: "mc",
+    text: "When you experience stress or pressure, you typically:",
+    options: [
+      { label: "Push harder — pressure tends to sharpen your focus", score: 4 },
+      { label: "Withdraw and need some time alone to reset", score: 3 },
+      { label: "Reach out to friends or family for support", score: 1 },
+      { label: "Look for distractions to take your mind off it", score: 2 }
+    ]
+  },
+  {
+    type: "likert",
+    text: "Rate your agreement with this statement:",
+    stmt: "I hold myself to high standards — sometimes higher than I would apply to other people."
+  },
+  {
+    type: "mc",
+    text: "When you disagree with someone, you tend to:",
+    options: [
+      { label: "State your position clearly and directly", score: 4 },
+      { label: "Look for a compromise that works for both sides", score: 2 },
+      { label: "Think it through carefully before deciding whether to say anything", score: 3 },
+      { label: "Avoid the confrontation if you can", score: 1 }
+    ]
+  },
+  {
+    type: "likert",
+    text: "Rate your agreement with this statement:",
+    stmt: "I present a confident face to others, but privately I sometimes question whether I've made the right choices."
+  },
+  {
+    type: "mc",
+    text: "Which description best fits how you typically make important decisions?",
+    options: [
+      { label: "Analytically — breaking down the options and weighing evidence", score: 3 },
+      { label: "Intuitively — trusting my gut feeling about what's right", score: 2 },
+      { label: "Carefully — reviewing everything more than once before committing", score: 4 },
+      { label: "Practically — focusing on what's most realistic and actionable", score: 1 }
+    ]
+  },
+  {
+    type: "likert",
+    text: "Rate your agreement with this statement:",
+    stmt: "My energy and social behaviour shift noticeably depending on who I'm with — I'm more outgoing in some settings and more reserved in others."
+  },
+  {
+    type: "mc",
+    text: "How do you prefer to recharge after a draining week?",
+    options: [
+      { label: "Quietly at home — reading, watching, or having time to myself", score: 3 },
+      { label: "Catching up with close friends or family", score: 1 },
+      { label: "Getting productive — working on personal projects or goals", score: 4 },
+      { label: "Something physical — sport, walking, getting outside", score: 2 }
+    ]
+  },
+  {
+    type: "likert",
+    text: "Rate your agreement with this statement:",
+    stmt: "I value independence and form my own views — but I can be persuaded by someone who earns my trust and presents good evidence."
+  }
+];
+
+const TYPES = {
+  A: {
+    name: "The Architect",
+    sub: "Structured · Analytical · Self-directed",
+    traits: ["Strategic thinking", "High personal standards", "Self-reliant", "Deliberate"],
+    color: "#3D2EC2"
+  },
+  B: {
+    name: "The Connector",
+    sub: "Perceptive · Relational · Adaptive",
+    traits: ["Empathetic", "Context-aware", "Collaborative", "Reads people well"],
+    color: "#1A6B4A"
+  },
+  C: {
+    name: "The Analyst",
+    sub: "Curious · Reflective · Principled",
+    traits: ["Depth over breadth", "Critical thinker", "Privately ambitious", "Considered"],
+    color: "#7A2E00"
+  },
+  D: {
+    name: "The Driver",
+    sub: "Decisive · Ambitious · Resilient",
+    traits: ["Goal-oriented", "High capacity", "Direct communicator", "Self-aware"],
+    color: "#0A4C8A"
+  }
+};
+
+const FORER_TEXT = `<p>You are someone who presents a confident face to the world, yet privately you carry doubts about whether you have made the right choices. You have a deep need to be liked and respected by the people around you, and it bothers you more than you let on when this isn't the case.</p>
+
+<p>You have a great deal of untapped potential that you haven't yet fully put to use. You are capable of more than others realise — and sometimes more than you give yourself credit for. At the same time, you can be your own harshest critic, holding yourself to standards you wouldn't apply to your friends.</p>
+
+<p>You value independence and like to think for yourself. You resist being told what to believe without evidence, yet you can be persuaded when someone earns your trust. You have found, often through experience, that it is wiser not to reveal too much of yourself too quickly to new people.</p>
+
+<p>Your mood and social energy shift depending on context. Around the right people you are warm, funny, and easy to talk to; in other situations you withdraw and prefer to observe. Both feel natural to you, and you don't think of this as a contradiction — it's just how you work.</p>
+
+<p>Change excites you in principle, but too much uncertainty at once makes you uncomfortable. You prefer to feel in control of your direction even when you're willing to adapt. Security — knowing where you stand — matters to you more than you might admit out loud.</p>
+
+<p>People who know you well would describe you as someone with strong values — even if you find it hard to articulate exactly what they are. You know what feels wrong before you know why, and that instinct has mostly served you well.</p>`;
+
+let currentQ = 0;
+let answers = new Array(QUESTIONS.length).fill(null);
+let userName = "";
+
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+function updateProgress() {
+  const pct = Math.round(((currentQ + 1) / QUESTIONS.length) * 100);
+  document.getElementById("prog-fill").style.width = pct + "%";
+  document.getElementById("prog-label").textContent = `${currentQ + 1} of ${QUESTIONS.length}`;
+  document.getElementById("q-num").textContent = `Question ${currentQ + 1}`;
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[currentQ];
+  document.getElementById("q-text").textContent = q.text;
+  const body = document.getElementById("q-body");
+  body.innerHTML = "";
+
+  if (q.type === "mc") {
+    const letters = ["A", "B", "C", "D"];
+    const wrap = document.createElement("div");
+    wrap.className = "options";
+    q.options.forEach((opt, i) => {
+      const div = document.createElement("div");
+      div.className = "option" + (answers[currentQ] === i ? " selected" : "");
+      div.innerHTML = `<div class="opt-letter">${letters[i]}</div><div class="opt-text">${opt.label}</div>`;
+      div.addEventListener("click", () => {
+        wrap.querySelectorAll(".option").forEach(o => o.classList.remove("selected"));
+        div.classList.add("selected");
+        answers[currentQ] = i;
+        document.getElementById("btn-next").disabled = false;
+      });
+      wrap.appendChild(div);
+    });
+    body.appendChild(wrap);
+  } else {
+    const stmt = document.createElement("div");
+    stmt.className = "likert-stmt";
+    stmt.textContent = `"${q.stmt}"`;
+    body.appendChild(stmt);
+
+    const scale = document.createElement("div");
+    scale.className = "likert-scale";
+    for (let v = 1; v <= 5; v++) {
+      const btn = document.createElement("div");
+      btn.className = "likert-btn" + (answers[currentQ] === v ? " selected" : "");
+      btn.innerHTML = `<div class="likert-num">${v}</div>`;
+      btn.addEventListener("click", () => {
+        scale.querySelectorAll(".likert-btn").forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+        answers[currentQ] = v;
+        document.getElementById("btn-next").disabled = false;
+      });
+      scale.appendChild(btn);
+    }
+    body.appendChild(scale);
+
+    const foot = document.createElement("div");
+    foot.className = "likert-foot";
+    foot.innerHTML = `<span>Strongly disagree</span><span>Strongly agree</span>`;
+    body.appendChild(foot);
+  }
+
+  document.getElementById("btn-next").disabled = answers[currentQ] === null;
+  document.getElementById("btn-back").style.visibility = currentQ === 0 ? "hidden" : "visible";
+  updateProgress();
+}
+
+function calcType() {
+  let score = 0;
+  QUESTIONS.forEach((q, i) => {
+    if (answers[i] === null) return;
+    if (q.type === "mc") {
+      score += q.options[answers[i]].score;
+    } else {
+      score += answers[i];
+    }
+  });
+  // Score range roughly 12–53; divide into 4 bands
+  if (score <= 25) return "A";
+  if (score <= 34) return "B";
+  if (score <= 43) return "C";
+  return "D";
+}
+
+function showResult() {
+  const typeKey = calcType();
+  const t = TYPES[typeKey];
+  document.getElementById("type-badge").textContent = typeKey;
+  document.getElementById("type-badge").style.background = t.color;
+  document.getElementById("result-type-name").textContent = t.name;
+  document.getElementById("result-type-sub").textContent = t.sub;
+  document.getElementById("result-name-line").textContent =
+    `Profile generated for ${userName || "you"}`;
+
+  const tags = document.getElementById("trait-tags");
+  tags.innerHTML = "";
+  t.traits.forEach(tr => {
+    const span = document.createElement("span");
+    span.className = "tag";
+    span.textContent = tr;
+    span.style.color = t.color;
+    const r = parseInt(t.color.slice(1,3),16);
+    const g = parseInt(t.color.slice(3,5),16);
+    const b = parseInt(t.color.slice(5,7),16);
+    span.style.background = `rgba(${r},${g},${b},0.1)`;
+    tags.appendChild(span);
+  });
+
+  document.getElementById("result-body").innerHTML = FORER_TEXT;
+  showScreen("screen-result");
+}
+
+function runLoading() {
+  showScreen("screen-loading");
+  const steps = ["ps1","ps2","ps3","ps4"];
+  let i = 0;
+  function next() {
+    if (i >= steps.length) {
+      setTimeout(showResult, 500);
+      return;
+    }
+    const el = document.getElementById(steps[i]);
+    el.classList.add("vis");
+    setTimeout(() => {
+      el.classList.add("done");
+      i++;
+      setTimeout(next, 600);
+    }, 700);
+  }
+  setTimeout(next, 400);
+}
+
+// Intro
+document.getElementById("btn-start").addEventListener("click", () => {
+  const name = document.getElementById("name-input").value.trim();
+  if (!name) {
+    document.getElementById("name-input").focus();
+    return;
+  }
+  userName = name;
+  currentQ = 0;
+  showScreen("screen-question");
+  renderQuestion();
+});
+
+document.getElementById("name-input").addEventListener("keydown", e => {
+  if (e.key === "Enter") document.getElementById("btn-start").click();
+});
+
+// Navigation
+document.getElementById("btn-next").addEventListener("click", () => {
+  if (currentQ < QUESTIONS.length - 1) {
+    currentQ++;
+    renderQuestion();
+  } else {
+    runLoading();
+  }
+});
+
+document.getElementById("btn-back").addEventListener("click", () => {
+  if (currentQ > 0) {
+    currentQ--;
+    renderQuestion();
+  }
+});
+
+// Stars
+const starsEl = document.getElementById("stars");
+const starEls = starsEl.querySelectorAll(".star");
+let rated = false;
+
+starEls.forEach(s => {
+  s.addEventListener("mouseenter", () => {
+    if (rated) return;
+    const v = +s.dataset.v;
+    starEls.forEach(x => x.classList.toggle("lit", +x.dataset.v <= v));
+  });
+});
+
+starsEl.addEventListener("mouseleave", () => {
+  if (rated) return;
+  starEls.forEach(x => x.classList.remove("lit"));
+});
+
+starEls.forEach(s => {
+  s.addEventListener("click", () => {
+    if (rated) return;
+    rated = true;
+    const v = +s.dataset.v;
+    starEls.forEach(x => x.classList.toggle("lit", +x.dataset.v <= v));
+    const done = document.getElementById("rating-done");
+    done.textContent = `You rated this ${v} out of 5. Thank you.`;
+    done.classList.add("vis");
+  });
+});
+</script>
