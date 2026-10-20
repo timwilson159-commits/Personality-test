@@ -25,7 +25,7 @@
   :root:not([data-theme="light"]) {
     --bg: #15141A;
     --surface: #1E1C28;
-    --surface-2: #27253300;
+    --surface-2: #272533;
     --fg: #EBE8E3;
     --fg-muted: #908D99;
     --accent: #7D70F6;
@@ -71,7 +71,7 @@ body {
   border-radius: 18px;
   width: 100%;
   max-width: 620px;
-  padding: 52px 52px;
+  padding: 52px;
   box-shadow: 0 4px 24px rgba(0,0,0,0.07);
 }
 
@@ -83,7 +83,7 @@ body {
 .screen { display: none; }
 .screen.active { display: block; }
 
-/* ── PROGRESS HEADER ── */
+/* PROGRESS HEADER */
 .q-header {
   display: flex;
   align-items: center;
@@ -120,7 +120,7 @@ body {
   transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ── INTRO ── */
+/* INTRO */
 .intro-eyebrow {
   font-size: 11px;
   font-weight: 600;
@@ -173,9 +173,7 @@ body {
   color: var(--fg-muted);
   margin-top: 3px;
 }
-.field {
-  margin-bottom: 22px;
-}
+.field { margin-bottom: 22px; }
 .field label {
   display: block;
   font-size: 13px;
@@ -198,7 +196,7 @@ body {
 .field input:focus { border-color: var(--accent); }
 .field input::placeholder { color: var(--fg-muted); }
 
-/* ── QUESTION ── */
+/* QUESTION */
 .q-num {
   font-size: 11.5px;
   font-weight: 600;
@@ -216,6 +214,8 @@ body {
   margin-bottom: 26px;
   text-wrap: balance;
 }
+
+/* Multiple choice */
 .options {
   display: flex;
   flex-direction: column;
@@ -251,7 +251,7 @@ body {
   margin-top: 1px;
 }
 .option.selected .opt-letter { background: var(--accent); border-color: var(--accent); color: #fff; }
-.opt-text { font-size: 14.5px; line-height: 1.55; color: var(--fg); }
+.opt-text { font-size: 14.5px; line-height: 1.55; color: var(--fg); min-width: 0; }
 
 /* Likert */
 .likert-stmt {
@@ -265,10 +265,7 @@ body {
   border-radius: 0 9px 9px 0;
   margin-bottom: 22px;
 }
-.likert-scale {
-  display: flex;
-  gap: 7px;
-}
+.likert-scale { display: flex; gap: 7px; }
 .likert-btn {
   flex: 1;
   padding: 13px 2px;
@@ -295,12 +292,98 @@ body {
   transition: color 0.15s;
 }
 .likert-btn.selected .likert-num { color: var(--accent); }
-.likert-foot {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 8px;
-}
+.likert-foot { display: flex; justify-content: space-between; margin-top: 8px; }
 .likert-foot span { font-size: 11px; color: var(--fg-muted); }
+
+/* Slider */
+.slider-wrap { padding: 4px 0; }
+.slider-val {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--accent-text);
+  text-align: center;
+  margin-bottom: 18px;
+  min-height: 20px;
+}
+.slider-val.empty { color: var(--fg-muted); font-weight: 400; font-style: italic; }
+.slider-input {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 5px;
+  border-radius: 99px;
+  outline: none;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+.slider-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.22);
+  transition: transform 0.1s;
+}
+.slider-input::-webkit-slider-thumb:active { transform: scale(1.15); }
+.slider-input::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  border: none;
+}
+.slider-labels { display: flex; justify-content: space-between; gap: 16px; }
+.slider-labels span {
+  font-size: 11.5px;
+  color: var(--fg-muted);
+  max-width: 46%;
+  line-height: 1.4;
+}
+.slider-labels span:last-child { text-align: right; }
+
+/* Ranking */
+.rank-wrap { display: flex; flex-direction: column; gap: 9px; }
+.rank-item {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 13px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  user-select: none;
+}
+.rank-item:hover { border-color: var(--accent); background: var(--option-hover); }
+.rank-item.ranked { border-color: var(--accent); background: var(--accent-soft); }
+.rank-badge {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--fg-muted);
+  font-variant-numeric: tabular-nums;
+  transition: all 0.15s;
+}
+.rank-item.ranked .rank-badge { background: var(--accent); border-color: var(--accent); color: #fff; }
+.rank-text { font-size: 14.5px; line-height: 1.5; color: var(--fg); min-width: 0; }
+.rank-instr {
+  font-size: 12px;
+  color: var(--fg-muted);
+  text-align: center;
+  padding: 10px 8px 2px;
+}
 
 /* Nav */
 .nav {
@@ -327,7 +410,7 @@ body {
 .btn-ghost:hover { color: var(--fg); }
 .btn-full { width: 100%; padding: 15px; font-size: 15px; border-radius: 10px; }
 
-/* ── LOADING ── */
+/* LOADING */
 .loading-wrap {
   display: flex;
   flex-direction: column;
@@ -351,14 +434,7 @@ body {
   animation: spin 0.85s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
-
-.p-steps {
-  display: flex;
-  flex-direction: column;
-  gap: 13px;
-  width: 100%;
-  max-width: 310px;
-}
+.p-steps { display: flex; flex-direction: column; gap: 13px; width: 100%; max-width: 310px; }
 .p-step {
   display: flex;
   align-items: center;
@@ -380,7 +456,7 @@ body {
 }
 .p-step.done .p-dot { background: var(--accent); }
 
-/* ── RESULT ── */
+/* RESULT */
 .result-eyebrow {
   font-size: 11px;
   font-weight: 600;
@@ -392,81 +468,53 @@ body {
 .result-name-line {
   font-size: 14.5px;
   color: var(--fg-muted);
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
 .type-badge {
-  width: 74px;
-  height: 74px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
-  background: var(--accent);
   color: #fff;
   font-family: var(--font-display);
-  font-size: 34px;
+  font-size: 38px;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 .result-type-name {
   font-family: var(--font-display);
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 700;
   color: var(--fg);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 .result-type-sub {
   font-size: 13.5px;
   color: var(--fg-muted);
-  margin-bottom: 6px;
+  margin-bottom: 20px;
+  letter-spacing: 0.04em;
 }
-.trait-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  margin-bottom: 28px;
-}
+.trait-tags { display: flex; flex-wrap: wrap; gap: 8px; }
 .tag {
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 500;
-  padding: 4px 11px;
+  padding: 5px 13px;
   border-radius: 99px;
-  background: var(--accent-soft);
-  color: var(--accent-text);
   border: 1px solid transparent;
 }
-.result-divider {
-  height: 1px;
-  background: var(--border);
-  margin: 20px 0 24px;
-}
-.result-body {
-  font-size: 15px;
-  line-height: 1.85;
-  color: var(--fg);
-}
-.result-body p { margin-bottom: 16px; }
-.result-body p:last-child { margin-bottom: 0; }
 
 /* Rating */
 .rating-box {
-  margin-top: 34px;
+  margin-top: 36px;
   padding: 22px 24px;
   background: var(--surface-2);
   border-radius: 12px;
   border: 1px solid var(--border);
 }
-.rating-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--fg);
-  margin-bottom: 4px;
-}
-.rating-sub {
-  font-size: 13px;
-  color: var(--fg-muted);
-  margin-bottom: 16px;
-}
+.rating-title { font-size: 14px; font-weight: 600; color: var(--fg); margin-bottom: 4px; }
+.rating-sub { font-size: 13px; color: var(--fg-muted); margin-bottom: 16px; }
 .stars { display: flex; gap: 8px; margin-bottom: 12px; }
 .star {
   font-size: 30px;
@@ -478,29 +526,24 @@ body {
 }
 .star.lit { color: #E8A020; }
 .star:hover { transform: scale(1.2); }
-.rating-done {
-  font-size: 13.5px;
-  color: var(--accent-text);
-  font-weight: 600;
-  display: none;
-}
+.rating-done { font-size: 13.5px; color: var(--accent-text); font-weight: 600; display: none; }
 .rating-done.vis { display: block; }
 </style>
 
 <div class="card">
 
-  <!-- ── INTRO SCREEN ── -->
+  <!-- INTRO -->
   <div class="screen active" id="screen-intro">
     <p class="intro-eyebrow">Personality Research Index</p>
     <h1 class="intro-title">What kind of person are you, really?</h1>
     <p class="intro-sub">This assessment uses validated psychological dimensions to identify your dominant personality profile. Your responses are completely confidential and are used only to generate your personalised type.</p>
     <div class="intro-stats">
       <div class="intro-stat">
-        <div class="stat-num">12</div>
+        <div class="stat-num">20</div>
         <div class="stat-lbl">Questions</div>
       </div>
       <div class="intro-stat">
-        <div class="stat-num">~5</div>
+        <div class="stat-num">~8</div>
         <div class="stat-lbl">Minutes</div>
       </div>
       <div class="intro-stat">
@@ -512,17 +555,17 @@ body {
       <label for="name-input">Your first name</label>
       <input type="text" id="name-input" placeholder="Enter your name" autocomplete="off" spellcheck="false">
     </div>
-    <button class="btn btn-primary btn-full" id="btn-start">Begin Assessment →</button>
+    <button class="btn btn-primary btn-full" id="btn-start">Begin Assessment</button>
   </div>
 
-  <!-- ── QUESTION SCREEN ── -->
+  <!-- QUESTION -->
   <div class="screen" id="screen-question">
     <div class="q-header">
       <span class="q-wordmark">PRI</span>
       <div class="progress-wrap">
-        <div class="progress-label" id="prog-label">1 of 12</div>
+        <div class="progress-label" id="prog-label">1 of 20</div>
         <div class="progress-track">
-          <div class="progress-fill" id="prog-fill" style="width:8%"></div>
+          <div class="progress-fill" id="prog-fill" style="width:5%"></div>
         </div>
       </div>
     </div>
@@ -530,16 +573,16 @@ body {
     <p class="q-text" id="q-text"></p>
     <div id="q-body"></div>
     <div class="nav">
-      <button class="btn btn-ghost" id="btn-back">← Back</button>
-      <button class="btn btn-primary" id="btn-next" disabled>Next →</button>
+      <button class="btn btn-ghost" id="btn-back">Back</button>
+      <button class="btn btn-primary" id="btn-next" disabled>Next</button>
     </div>
   </div>
 
-  <!-- ── LOADING SCREEN ── -->
+  <!-- LOADING -->
   <div class="screen" id="screen-loading">
     <div class="loading-wrap">
       <div class="loader"></div>
-      <p class="loading-title">Analysing your responses…</p>
+      <p class="loading-title">Analysing your responses...</p>
       <div class="p-steps" id="p-steps">
         <div class="p-step" id="ps1"><div class="p-dot"></div>Mapping response patterns</div>
         <div class="p-step" id="ps2"><div class="p-dot"></div>Scoring dimensional indicators</div>
@@ -549,7 +592,7 @@ body {
     </div>
   </div>
 
-  <!-- ── RESULT SCREEN ── -->
+  <!-- RESULT -->
   <div class="screen" id="screen-result">
     <p class="result-eyebrow">Your Personality Profile</p>
     <p class="result-name-line" id="result-name-line"></p>
@@ -557,23 +600,21 @@ body {
     <p class="result-type-name" id="result-type-name"></p>
     <p class="result-type-sub" id="result-type-sub"></p>
     <div class="trait-tags" id="trait-tags"></div>
-    <div class="result-divider"></div>
-    <div class="result-body" id="result-body"></div>
     <div class="rating-box">
       <p class="rating-title">How accurate is this profile?</p>
-      <p class="rating-sub">Rate how well this description reflects who you actually are (1 = not at all, 5 = extremely accurate).</p>
+      <p class="rating-sub">Rate how well this result reflects who you actually are (1 = not at all, 5 = extremely accurate).</p>
       <div class="stars" id="stars">
-        <span class="star" data-v="1">★</span>
-        <span class="star" data-v="2">★</span>
-        <span class="star" data-v="3">★</span>
-        <span class="star" data-v="4">★</span>
-        <span class="star" data-v="5">★</span>
+        <span class="star" data-v="1">&#9733;</span>
+        <span class="star" data-v="2">&#9733;</span>
+        <span class="star" data-v="3">&#9733;</span>
+        <span class="star" data-v="4">&#9733;</span>
+        <span class="star" data-v="5">&#9733;</span>
       </div>
       <p class="rating-done" id="rating-done"></p>
     </div>
   </div>
 
-</div><!-- /card -->
+</div>
 
 <script>
 const QUESTIONS = [
@@ -584,43 +625,60 @@ const QUESTIONS = [
       { label: "Create a detailed plan or checklist before starting", score: 4 },
       { label: "Start working and figure out the approach as you go", score: 2 },
       { label: "Research and gather information before deciding on a direction", score: 3 },
-      { label: "Talk it over with others to get a sense of what's expected", score: 1 }
+      { label: "Talk it over with others to get a sense of what is expected", score: 1 }
     ]
   },
   {
     type: "likert",
     text: "Rate your agreement with this statement:",
-    stmt: "I often find myself replaying decisions or conversations after the fact, wondering if I handled things the right way."
+    stmt: "I often find myself replaying decisions or conversations afterwards, wondering if I handled things the right way."
   },
   {
     type: "mc",
     text: "In a group situation, you tend to naturally take on the role of:",
     options: [
-      { label: "The organiser — keeping things structured and on track", score: 4 },
-      { label: "The idea generator — contributing creative possibilities", score: 3 },
-      { label: "The executor — getting your head down and doing the work", score: 2 },
-      { label: "The mediator — making sure everyone works well together", score: 1 }
+      { label: "The organiser, keeping things structured and on track", score: 4 },
+      { label: "The idea generator, contributing creative possibilities", score: 3 },
+      { label: "The executor, getting your head down and doing the work", score: 2 },
+      { label: "The mediator, making sure everyone works well together", score: 1 }
     ]
   },
   {
     type: "likert",
     text: "Rate your agreement with this statement:",
-    stmt: "I have a great deal of unused potential that I haven't yet had the chance to fully put to use."
+    stmt: "I have a great deal of unused potential that I have not yet had the chance to fully put to use."
+  },
+  {
+    type: "slider",
+    text: "When approaching a task or problem, where do you naturally sit?",
+    lowLabel: "I prefer clear structure and instructions",
+    highLabel: "I prefer to figure it out my own way"
   },
   {
     type: "mc",
     text: "When you experience stress or pressure, you typically:",
     options: [
-      { label: "Push harder — pressure tends to sharpen your focus", score: 4 },
+      { label: "Push through it; pressure tends to sharpen your focus", score: 4 },
       { label: "Withdraw and need some time alone to reset", score: 3 },
       { label: "Reach out to friends or family for support", score: 1 },
       { label: "Look for distractions to take your mind off it", score: 2 }
     ]
   },
   {
+    type: "ranking",
+    text: "Rank these four qualities from most to least important to you personally.",
+    instr: "Click each item in order, starting with the most important to you.",
+    items: [
+      { label: "Being honest, even when it is uncomfortable", score: 3 },
+      { label: "Being dependable and following through on commitments", score: 4 },
+      { label: "Being creative and thinking in ways others do not", score: 2 },
+      { label: "Being fair and treating everyone the same way", score: 1 }
+    ]
+  },
+  {
     type: "likert",
     text: "Rate your agreement with this statement:",
-    stmt: "I hold myself to high standards — sometimes higher than I would apply to other people."
+    stmt: "I hold myself to high standards, sometimes higher than I would apply to other people."
   },
   {
     type: "mc",
@@ -633,39 +691,92 @@ const QUESTIONS = [
     ]
   },
   {
-    type: "likert",
-    text: "Rate your agreement with this statement:",
-    stmt: "I present a confident face to others, but privately I sometimes question whether I've made the right choices."
+    type: "slider",
+    text: "When making a significant decision, how much do you rely on your own judgment versus seeking input from others?",
+    lowLabel: "I strongly seek others' input first",
+    highLabel: "I trust my own judgment above all"
   },
   {
     type: "mc",
     text: "Which description best fits how you typically make important decisions?",
     options: [
-      { label: "Analytically — breaking down the options and weighing evidence", score: 3 },
-      { label: "Intuitively — trusting my gut feeling about what's right", score: 2 },
-      { label: "Carefully — reviewing everything more than once before committing", score: 4 },
-      { label: "Practically — focusing on what's most realistic and actionable", score: 1 }
+      { label: "Analytically: I break down the options and weigh the evidence", score: 3 },
+      { label: "Intuitively: I trust my gut feeling about what is right", score: 2 },
+      { label: "Carefully: I review everything more than once before committing", score: 4 },
+      { label: "Practically: I focus on what is most realistic and actionable", score: 1 }
+    ]
+  },
+  {
+    type: "mc",
+    text: "You are running five minutes late to a planned catch-up with a friend. Which response is most honest?",
+    options: [
+      { label: "I have already messaged ahead. I cannot stand keeping people waiting.", score: 4 },
+      { label: "Five minutes is not really late. They will be fine.", score: 1 },
+      { label: "I am already mentally calculating how to make it up to them.", score: 3 },
+      { label: "This is unusual for me. I typically leave early to avoid this.", score: 2 }
+    ]
+  },
+  {
+    type: "ranking",
+    text: "Rank these four statements from most to least like you.",
+    instr: "Click each statement in order, starting with the one that fits you best.",
+    items: [
+      { label: "I usually know what I want", score: 4 },
+      { label: "I adapt to whatever the situation calls for", score: 2 },
+      { label: "I stand by my principles, even when it costs me", score: 3 },
+      { label: "I focus on keeping the people around me happy", score: 1 }
     ]
   },
   {
     type: "likert",
     text: "Rate your agreement with this statement:",
-    stmt: "My energy and social behaviour shift noticeably depending on who I'm with — I'm more outgoing in some settings and more reserved in others."
+    stmt: "I present a confident face to others, but privately I sometimes question whether I have made the right choices."
+  },
+  {
+    type: "slider",
+    text: "How openly do you share your real opinions with people you have just met?",
+    lowLabel: "I keep my views to myself at first",
+    highLabel: "I say exactly what I think from the start"
+  },
+  {
+    type: "mc",
+    text: "Which metaphor best captures how your mind tends to work?",
+    options: [
+      { label: "A chess player: always thinking a few moves ahead", score: 4 },
+      { label: "A detective: piecing clues together to find the answer", score: 3 },
+      { label: "An improviser: responsive, fluid, and in the moment", score: 1 },
+      { label: "An architect: designing systems and seeing the big picture", score: 2 }
+    ]
+  },
+  {
+    type: "likert",
+    text: "Rate your agreement with this statement:",
+    stmt: "My energy and social behaviour shift noticeably depending on who I am with. I am more outgoing in some settings and more reserved in others."
+  },
+  {
+    type: "mc",
+    text: "Which of these would bother you most if someone said it about you?",
+    options: [
+      { label: "\"They are unreliable. You cannot count on them.\"", score: 2 },
+      { label: "\"They are not very original. They always play it safe.\"", score: 3 },
+      { label: "\"They are cold. They do not really care about people.\"", score: 1 },
+      { label: "\"They are too stubborn. They never back down.\"", score: 4 }
+    ]
   },
   {
     type: "mc",
     text: "How do you prefer to recharge after a draining week?",
     options: [
-      { label: "Quietly at home — reading, watching, or having time to myself", score: 3 },
+      { label: "Quietly at home, reading, watching, or having time to myself", score: 3 },
       { label: "Catching up with close friends or family", score: 1 },
-      { label: "Getting productive — working on personal projects or goals", score: 4 },
-      { label: "Something physical — sport, walking, getting outside", score: 2 }
+      { label: "Getting productive, working on personal projects or goals", score: 4 },
+      { label: "Something physical: sport, walking, or getting outside", score: 2 }
     ]
   },
   {
     type: "likert",
     text: "Rate your agreement with this statement:",
-    stmt: "I value independence and form my own views — but I can be persuaded by someone who earns my trust and presents good evidence."
+    stmt: "I value independence and form my own views, but I can be persuaded by someone who earns my trust and presents good evidence."
   }
 ];
 
@@ -696,20 +807,9 @@ const TYPES = {
   }
 };
 
-const FORER_TEXT = `<p>You are someone who presents a confident face to the world, yet privately you carry doubts about whether you have made the right choices. You have a deep need to be liked and respected by the people around you, and it bothers you more than you let on when this isn't the case.</p>
-
-<p>You have a great deal of untapped potential that you haven't yet fully put to use. You are capable of more than others realise — and sometimes more than you give yourself credit for. At the same time, you can be your own harshest critic, holding yourself to standards you wouldn't apply to your friends.</p>
-
-<p>You value independence and like to think for yourself. You resist being told what to believe without evidence, yet you can be persuaded when someone earns your trust. You have found, often through experience, that it is wiser not to reveal too much of yourself too quickly to new people.</p>
-
-<p>Your mood and social energy shift depending on context. Around the right people you are warm, funny, and easy to talk to; in other situations you withdraw and prefer to observe. Both feel natural to you, and you don't think of this as a contradiction — it's just how you work.</p>
-
-<p>Change excites you in principle, but too much uncertainty at once makes you uncomfortable. You prefer to feel in control of your direction even when you're willing to adapt. Security — knowing where you stand — matters to you more than you might admit out loud.</p>
-
-<p>People who know you well would describe you as someone with strong values — even if you find it hard to articulate exactly what they are. You know what feels wrong before you know why, and that instinct has mostly served you well.</p>`;
-
+const TOTAL_Q = QUESTIONS.length;
 let currentQ = 0;
-let answers = new Array(QUESTIONS.length).fill(null);
+let answers = new Array(TOTAL_Q).fill(null);
 let userName = "";
 
 function showScreen(id) {
@@ -718,10 +818,25 @@ function showScreen(id) {
 }
 
 function updateProgress() {
-  const pct = Math.round(((currentQ + 1) / QUESTIONS.length) * 100);
+  const pct = Math.round(((currentQ + 1) / TOTAL_Q) * 100);
   document.getElementById("prog-fill").style.width = pct + "%";
-  document.getElementById("prog-label").textContent = `${currentQ + 1} of ${QUESTIONS.length}`;
+  document.getElementById("prog-label").textContent = `${currentQ + 1} of ${TOTAL_Q}`;
   document.getElementById("q-num").textContent = `Question ${currentQ + 1}`;
+}
+
+function setSliderFill(input) {
+  const pct = input.value;
+  const accent = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim();
+  const border = getComputedStyle(document.documentElement).getPropertyValue("--border").trim();
+  input.style.background = `linear-gradient(to right, ${accent} 0%, ${accent} ${pct}%, ${border} ${pct}%, ${border} 100%)`;
+}
+
+function sliderLabel(val, q) {
+  if (val <= 15) return q.lowLabel;
+  if (val <= 35) return "Leaning toward: " + q.lowLabel.toLowerCase();
+  if (val <= 65) return "Somewhere in between, depends on the situation";
+  if (val <= 85) return "Leaning toward: " + q.highLabel.toLowerCase();
+  return q.highLabel;
 }
 
 function renderQuestion() {
@@ -731,7 +846,7 @@ function renderQuestion() {
   body.innerHTML = "";
 
   if (q.type === "mc") {
-    const letters = ["A", "B", "C", "D"];
+    const letters = ["A","B","C","D"];
     const wrap = document.createElement("div");
     wrap.className = "options";
     q.options.forEach((opt, i) => {
@@ -747,10 +862,11 @@ function renderQuestion() {
       wrap.appendChild(div);
     });
     body.appendChild(wrap);
-  } else {
+
+  } else if (q.type === "likert") {
     const stmt = document.createElement("div");
     stmt.className = "likert-stmt";
-    stmt.textContent = `"${q.stmt}"`;
+    stmt.textContent = "“" + q.stmt + "”";
     body.appendChild(stmt);
 
     const scale = document.createElement("div");
@@ -771,8 +887,86 @@ function renderQuestion() {
 
     const foot = document.createElement("div");
     foot.className = "likert-foot";
-    foot.innerHTML = `<span>Strongly disagree</span><span>Strongly agree</span>`;
+    foot.innerHTML = "<span>Strongly disagree</span><span>Strongly agree</span>";
     body.appendChild(foot);
+
+  } else if (q.type === "slider") {
+    const wrap = document.createElement("div");
+    wrap.className = "slider-wrap";
+
+    const valDisplay = document.createElement("div");
+    const saved = answers[currentQ];
+    valDisplay.className = "slider-val" + (saved === null ? " empty" : "");
+    valDisplay.textContent = saved === null ? "Move the slider to respond" : sliderLabel(saved, q);
+    wrap.appendChild(valDisplay);
+
+    const input = document.createElement("input");
+    input.type = "range";
+    input.min = 0;
+    input.max = 100;
+    input.step = 1;
+    input.value = saved !== null ? saved : 50;
+    input.className = "slider-input";
+    setSliderFill(input);
+    wrap.appendChild(input);
+
+    const labels = document.createElement("div");
+    labels.className = "slider-labels";
+    labels.innerHTML = `<span>${q.lowLabel}</span><span>${q.highLabel}</span>`;
+    wrap.appendChild(labels);
+
+    input.addEventListener("input", () => {
+      answers[currentQ] = +input.value;
+      valDisplay.className = "slider-val";
+      valDisplay.textContent = sliderLabel(+input.value, q);
+      setSliderFill(input);
+      document.getElementById("btn-next").disabled = false;
+    });
+
+    body.appendChild(wrap);
+
+  } else if (q.type === "ranking") {
+    const saved = answers[currentQ] ? [...answers[currentQ]] : [];
+
+    const wrap = document.createElement("div");
+    wrap.className = "rank-wrap";
+
+    function renderRanks() {
+      wrap.innerHTML = "";
+      q.items.forEach((item, i) => {
+        const pos = saved.indexOf(i);
+        const div = document.createElement("div");
+        div.className = "rank-item" + (pos !== -1 ? " ranked" : "");
+        div.innerHTML = `<div class="rank-badge">${pos !== -1 ? pos + 1 : ""}</div><div class="rank-text">${item.label}</div>`;
+        div.addEventListener("click", () => {
+          const existing = saved.indexOf(i);
+          if (existing !== -1) {
+            saved.splice(existing, 1);
+          } else {
+            saved.push(i);
+          }
+          answers[currentQ] = saved.length === q.items.length ? [...saved] : null;
+          document.getElementById("btn-next").disabled = answers[currentQ] === null;
+          renderRanks();
+        });
+        wrap.appendChild(div);
+      });
+
+      const instr = document.createElement("p");
+      instr.className = "rank-instr";
+      const remaining = q.items.length - saved.length;
+      if (remaining > 0 && saved.length === 0) {
+        instr.textContent = q.instr;
+      } else if (remaining > 0) {
+        instr.textContent = `${remaining} item${remaining > 1 ? "s" : ""} remaining. Click to continue ranking.`;
+      } else {
+        instr.textContent = "Ranking complete. Click any item to adjust.";
+      }
+      wrap.appendChild(instr);
+    }
+
+    renderRanks();
+    body.appendChild(wrap);
   }
 
   document.getElementById("btn-next").disabled = answers[currentQ] === null;
@@ -783,45 +977,49 @@ function renderQuestion() {
 function calcType() {
   let score = 0;
   QUESTIONS.forEach((q, i) => {
-    if (answers[i] === null) return;
+    const a = answers[i];
+    if (a === null) return;
     if (q.type === "mc") {
-      score += q.options[answers[i]].score;
-    } else {
-      score += answers[i];
+      score += q.options[a].score;
+    } else if (q.type === "likert") {
+      score += a;
+    } else if (q.type === "slider") {
+      score += Math.min(5, Math.max(1, Math.round(a / 25) + 1));
+    } else if (q.type === "ranking") {
+      score += q.items[a[0]].score;
     }
   });
-  // Score range roughly 12–53; divide into 4 bands
-  if (score <= 25) return "A";
-  if (score <= 34) return "B";
-  if (score <= 43) return "C";
+  if (score <= 42) return "A";
+  if (score <= 58) return "B";
+  if (score <= 74) return "C";
   return "D";
 }
 
 function showResult() {
   const typeKey = calcType();
   const t = TYPES[typeKey];
+
   document.getElementById("type-badge").textContent = typeKey;
   document.getElementById("type-badge").style.background = t.color;
   document.getElementById("result-type-name").textContent = t.name;
   document.getElementById("result-type-sub").textContent = t.sub;
-  document.getElementById("result-name-line").textContent =
-    `Profile generated for ${userName || "you"}`;
+  document.getElementById("result-name-line").textContent = "Profile generated for " + (userName || "you");
 
   const tags = document.getElementById("trait-tags");
   tags.innerHTML = "";
+  const r = parseInt(t.color.slice(1,3),16);
+  const g = parseInt(t.color.slice(3,5),16);
+  const b = parseInt(t.color.slice(5,7),16);
   t.traits.forEach(tr => {
     const span = document.createElement("span");
     span.className = "tag";
     span.textContent = tr;
     span.style.color = t.color;
-    const r = parseInt(t.color.slice(1,3),16);
-    const g = parseInt(t.color.slice(3,5),16);
-    const b = parseInt(t.color.slice(5,7),16);
     span.style.background = `rgba(${r},${g},${b},0.1)`;
+    span.style.borderColor = `rgba(${r},${g},${b},0.2)`;
     tags.appendChild(span);
   });
 
-  document.getElementById("result-body").innerHTML = FORER_TEXT;
   showScreen("screen-result");
 }
 
@@ -830,10 +1028,7 @@ function runLoading() {
   const steps = ["ps1","ps2","ps3","ps4"];
   let i = 0;
   function next() {
-    if (i >= steps.length) {
-      setTimeout(showResult, 500);
-      return;
-    }
+    if (i >= steps.length) { setTimeout(showResult, 500); return; }
     const el = document.getElementById(steps[i]);
     el.classList.add("vis");
     setTimeout(() => {
@@ -845,15 +1040,12 @@ function runLoading() {
   setTimeout(next, 400);
 }
 
-// Intro
 document.getElementById("btn-start").addEventListener("click", () => {
   const name = document.getElementById("name-input").value.trim();
-  if (!name) {
-    document.getElementById("name-input").focus();
-    return;
-  }
+  if (!name) { document.getElementById("name-input").focus(); return; }
   userName = name;
   currentQ = 0;
+  answers = new Array(TOTAL_Q).fill(null);
   showScreen("screen-question");
   renderQuestion();
 });
@@ -862,9 +1054,8 @@ document.getElementById("name-input").addEventListener("keydown", e => {
   if (e.key === "Enter") document.getElementById("btn-start").click();
 });
 
-// Navigation
 document.getElementById("btn-next").addEventListener("click", () => {
-  if (currentQ < QUESTIONS.length - 1) {
+  if (currentQ < TOTAL_Q - 1) {
     currentQ++;
     renderQuestion();
   } else {
@@ -873,13 +1064,9 @@ document.getElementById("btn-next").addEventListener("click", () => {
 });
 
 document.getElementById("btn-back").addEventListener("click", () => {
-  if (currentQ > 0) {
-    currentQ--;
-    renderQuestion();
-  }
+  if (currentQ > 0) { currentQ--; renderQuestion(); }
 });
 
-// Stars
 const starsEl = document.getElementById("stars");
 const starEls = starsEl.querySelectorAll(".star");
 let rated = false;
@@ -904,7 +1091,7 @@ starEls.forEach(s => {
     const v = +s.dataset.v;
     starEls.forEach(x => x.classList.toggle("lit", +x.dataset.v <= v));
     const done = document.getElementById("rating-done");
-    done.textContent = `You rated this ${v} out of 5. Thank you.`;
+    done.textContent = "You rated this " + v + " out of 5. Thank you.";
     done.classList.add("vis");
   });
 });
